@@ -2,7 +2,15 @@ var express = require('express');
 var router = express.Router();
 
 module.exports = function(passport){
+    router.get('/status', function(req, res){
+		if (req.isAuthenticated){
+           res.send({state: 'success', user: req.user.username, message: "user is not logged on"});
+		} else {
+			res.send({state: 'failure', user: null, message: "user is not logged on"});
+		}
 
+		
+	});
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){
 		res.send({state: 'success', user: req.user ? req.user : null});

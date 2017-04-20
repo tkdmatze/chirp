@@ -5,11 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 var passport = require('passport');
 //initialize mongoose schemas
 require('./models/models');
 var index = require('./routes/index');
 var api = require('./routes/api');
+var sessions = require('./routes/sessions');
 var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');                         //add for Mongo support
 mongoose.connect('mongodb://localhost/test-chirp');              //connect to Mongo
@@ -23,7 +25,10 @@ app.set('view engine', 'ejs');
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(session({
-  secret: 'keyboard cat'
+  secret: 'keyboard cat',
+  resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,7 +40,7 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/auth', authenticate);
 app.use('/api', api);
-
+app.use('/sessions', sessions);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

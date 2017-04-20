@@ -12,7 +12,11 @@ var userSchema = new mongoose.Schema({
 	password: String, //hash created from password
 	created_at: {type: Date, default: Date.now}
 })
-
+var sessionSchema = new mongoose.Schema({
+	_id: String,
+	expires: Date
+})
 
 mongoose.model('Post', postSchema);
 mongoose.model('User', userSchema);
+mongoose.model('Session', sessionSchema);

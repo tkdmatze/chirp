@@ -8,6 +8,15 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ro
     	$rootScope.current_user = '';
 			$location.path('/');
 	};
+	$rootScope.checkStatus = function(){
+   	$http.get('auth/status').success(function(data){
+		  if(data.state == 'success'){
+        $rootScope.authenticated = true;
+        $rootScope.current_user = data.user;
+			}
+		});
+	};
+	$rootScope.checkStatus();
 });
 
 app.config(function($routeProvider){
