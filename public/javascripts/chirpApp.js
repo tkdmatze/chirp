@@ -1,25 +1,25 @@
-var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http, $location) {
+var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function ($rootScope, $http, $location) {
 	$rootScope.authenticated = false;
 	$rootScope.current_user = '';
-	
-	$rootScope.signout = function(){
-    	$http.get('auth/signout');
-    	$rootScope.authenticated = false;
-    	$rootScope.current_user = '';
-			$location.path('/');
+
+	$rootScope.signout = function () {
+		$http.get('auth/signout');
+		$rootScope.authenticated = false;
+		$rootScope.current_user = '';
+		$location.path('/');
 	};
-	$rootScope.checkStatus = function(){
-   	$http.get('auth/status').success(function(data){
-		  if(data.state == 'success'){
-        $rootScope.authenticated = true;
-        $rootScope.current_user = data.user;
+	$rootScope.checkStatus = function () {
+		$http.get('auth/status').success(function (data) {
+			if (data.state == 'success') {
+				$rootScope.authenticated = true;
+				$rootScope.current_user = data.user;
 				$rootScope.log('loadStartSiteLoggedIn');
 			} else {
 				$rootScope.log('loadStartSiteLoggedOut');
 			}
 		});
 	};
-	$rootScope.log = function(item){
+	$rootScope.log = function (item) {
 		var payload = {};
 		payload.action = item;
 		$http.post('/logger', payload);
@@ -27,7 +27,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ro
 	$rootScope.checkStatus();
 });
 
-app.config(function($routeProvider){
+app.config(function ($routeProvider) {
 	$routeProvider
 		//the timeline display
 		.when('/', {
@@ -46,53 +46,54 @@ app.config(function($routeProvider){
 		});
 });
 
-app.factory('postService', function($resource){
+app.factory('postService', function ($resource) {
 	return $resource('/api/posts/:id');
 });
 
 
 
-app.controller('mainController', function(postService, $scope, $rootScope){
+app.controller('mainController', function (postService, $scope, $rootScope) {
 	$scope.posts = postService.query();
-	$scope.newPost = {created_by: '', text: '', created_at: ''};
-	
-	$scope.post = function() {
-	  $scope.newPost.created_by = $rootScope.current_user;
-	  $scope.newPost.created_at = Date.now();
-	  postService.save($scope.newPost, function(){
-	    $scope.posts = postService.query();
-	    $scope.newPost = {created_by: '', text: '', created_at: ''};
-	  });
+	$scope.newPost = { created_by: '', text: '', created_at: '' };
+
+	$scope.post = function () {
+		$scope.newPost.created_by = $rootScope.current_user;
+		$scope.newPost.created_at = Date.now();
+		postService.save($scope.newPost, function () {
+			$rootScope.log('posted');
+			$scope.posts = postService.query();
+			$scope.newPost = { created_by: '', text: '', created_at: '' };
+		});
 	};
 });
 
-app.controller('authController', function($scope, $http, $rootScope, $location){
-  $scope.user = {username: '', password: ''};
-  $scope.error_message = '';
+app.controller('authController', function ($scope, $http, $rootScope, $location) {
+	$scope.user = { username: '', password: '' };
+	$scope.error_message = '';
 
-  $scope.login = function(){
-    $http.post('/auth/login', $scope.user).success(function(data){
-      if(data.state == 'success'){
-        $rootScope.authenticated = true;
-        $rootScope.current_user = data.user.username;
-        $location.path('/');
-      }
-      else{
-        $scope.error_message = data.message;
-      }
-    });
-  };
+	$scope.login = function () {
+		$http.post('/auth/login', $scope.user).success(function (data) {
+			if (data.state == 'success') {
+				$rootScope.authenticated = true;
+				$rootScope.current_user = data.user.username;
+				$location.path('/');
+			}
+			else {
+				$scope.error_message = data.message;
+			}
+		});
+	};
 
-  $scope.register = function(){
-    $http.post('/auth/signup', $scope.user).success(function(data){
-      if(data.state == 'success'){
-        $rootScope.authenticated = true;
-        $rootScope.current_user = data.user.username;
-        $location.path('/');
-      }
-      else{
-        $scope.error_message = data.message;
-      }
-    });
-  };
+	$scope.register = function () {
+		$http.post('/auth/signup', $scope.user).success(function (data) {
+			if (data.state == 'success') {
+				$rootScope.authenticated = true;
+				$rootScope.current_user = data.user.username;
+				$location.path('/');
+			}
+			else {
+				$scope.error_message = data.message;
+			}
+		});
+	};
 });

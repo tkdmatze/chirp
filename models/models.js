@@ -23,6 +23,7 @@ var sessionActivitySchema = new mongoose.Schema({
 })
 var kpiSchema = new mongoose.Schema({
 	name : String,
+	number: { type: Number, default: 1},
 	day: {type: Date, default: Date.now}
 })
 
