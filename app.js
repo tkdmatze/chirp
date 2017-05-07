@@ -12,6 +12,7 @@ require('./models/models');
 var index = require('./routes/index');
 var api = require('./routes/api');
 var sessions = require('./routes/sessions');
+var mylogger = require('./routes/logger');
 var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');                         //add for Mongo support
 mongoose.connect('mongodb://localhost/test-chirp');              //connect to Mongo
@@ -41,6 +42,7 @@ app.use('/', index);
 app.use('/auth', authenticate);
 app.use('/api', api);
 app.use('/sessions', sessions);
+app.use('/logger', mylogger);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

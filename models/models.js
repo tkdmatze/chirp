@@ -16,7 +16,13 @@ var sessionSchema = new mongoose.Schema({
 	_id: String,
 	expires: Date
 })
+var sessionActivitySchema = new mongoose.Schema({
+	session : String,
+	action: String,
+	created_at: {type: Date, default: Date.now}
+})
 
 mongoose.model('Post', postSchema);
 mongoose.model('User', userSchema);
 mongoose.model('Session', sessionSchema);
+mongoose.model('SessionActivity', sessionActivitySchema);

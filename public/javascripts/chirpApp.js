@@ -13,9 +13,17 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ro
 		  if(data.state == 'success'){
         $rootScope.authenticated = true;
         $rootScope.current_user = data.user;
+				$rootScope.log('loadStartSiteLoggedIn');
+			} else {
+				$rootScope.log('loadStartSiteLoggedOut');
 			}
 		});
 	};
+	$rootScope.log = function(item){
+		var payload = {};
+		payload.action = item;
+		$http.post('/logger', payload);
+	}
 	$rootScope.checkStatus();
 });
 
@@ -41,6 +49,8 @@ app.config(function($routeProvider){
 app.factory('postService', function($resource){
 	return $resource('/api/posts/:id');
 });
+
+
 
 app.controller('mainController', function(postService, $scope, $rootScope){
 	$scope.posts = postService.query();
