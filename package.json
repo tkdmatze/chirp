@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-     "test": "node_modules/.bin/mocha -w"
+    "test": "node_modules/.bin/mocha -w"
   },
   "dependencies": {
     "bcrypt-nodejs": "*",
@@ -21,6 +21,7 @@
     "passport": "^0.3.2",
     "passport-local": "*",
     "serve-favicon": "^2.4.2",
-    "should": "^11.2.1"
+    "should": "^11.2.1",
+    "simple-enum": "0.0.3"
   }
 }

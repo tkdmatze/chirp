@@ -21,8 +21,13 @@ var sessionActivitySchema = new mongoose.Schema({
 	action: String,
 	created_at: {type: Date, default: Date.now}
 })
+var kpiSchema = new mongoose.Schema({
+	name : String,
+	day: {type: Date, default: Date.now}
+})
 
 mongoose.model('Post', postSchema);
 mongoose.model('User', userSchema);
 mongoose.model('Session', sessionSchema);
 mongoose.model('SessionActivity', sessionActivitySchema);
+mongoose.model('Kpi', kpiSchema);
