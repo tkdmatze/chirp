@@ -1,14 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose');
-var Session = mongoose.model('Session');
+var SessionActivity = mongoose.model('SessionActivity');
 
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
 	// Passport adds this method to request object. A middleware is allowed to add properties to
 	// request and response objects
-
 
 	if (req.isAuthenticated()){
 		return next();
@@ -21,25 +20,14 @@ function isAuthenticated (req, res, next) {
 //Register the authentication middleware
 router.use('/', isAuthenticated);
 
-router.route('/')
-	//gets all sessions
-	.get(function(req, res){
-		Session.find(function(err, sessions){
-			if(err){
-				return res.send(500, err);
-			}
-			return res.send(200,sessions);
-		});
-	});
-
 
 router.route('/:id')
 	//gets specified session
 	.get(function(req, res){
-		Session.findById(req.params.id, function(err, session){
+		SessionActivity.find({session : req.params.id}, function(err, activities){
 			if(err)
 				res.send(err);
-			res.json(session);
+			res.json(activities);
 		});
 	}) 
 	

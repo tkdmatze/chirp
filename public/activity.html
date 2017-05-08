@@ -1,0 +1,10 @@
+
+<div id="stream">
+	<h4>Activities</h4>
+		<div class="post" ng-repeat="activity in activities | orderBy:'created_at':true" ng-class-odd="'odd'" ng-class-even="'even'"> 
+			<p>{{activity.action}}</p>
+			<small class="pull-right">{{activity.created_at | date:"HH:mm 'Uhr am' dd.MM.yyyy"}}</small>
+		</div>
+</div>
+
+

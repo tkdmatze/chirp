@@ -12,6 +12,7 @@ require('./models/models');
 var index = require('./routes/index');
 var api = require('./routes/api');
 var sessions = require('./routes/sessions');
+var activities = require('./routes/activity');
 var mylogger = require('./routes/logger');
 var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');                         //add for Mongo support
@@ -41,7 +42,8 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/auth', authenticate);
 app.use('/api', api);
-app.use('/sessions', sessions);
+app.use('/sessionlist', sessions);
+app.use('/activity', activities);
 app.use('/logger', mylogger);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

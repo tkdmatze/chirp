@@ -43,13 +43,24 @@ app.config(function ($routeProvider) {
 		.when('/signup', {
 			templateUrl: 'register.html',
 			controller: 'authController'
+		})
+		//the session display
+		.when('/session', {
+			templateUrl: 'sessions.html',
+			controller: 'sessionController'
+		})//the session display
+		.when('/activity/:id', {
+			templateUrl: 'activity.html',
+			controller: 'activityController'
 		});
 });
 
 app.factory('postService', function ($resource) {
 	return $resource('/api/posts/:id');
 });
-
+app.factory('sessionService', function ($resource) {
+	return $resource('/sessionlist/:id');
+});
 
 
 app.controller('mainController', function (postService, $scope, $rootScope) {
@@ -65,6 +76,22 @@ app.controller('mainController', function (postService, $scope, $rootScope) {
 			$scope.newPost = { created_by: '', text: '', created_at: '' };
 		});
 	};
+});
+
+app.controller('sessionController', function ( $scope, sessionService) {
+
+	$scope.sessions = sessionService.query(function(){
+		for (var i=0 ; i< $scope.sessions.length ; i++ ){
+			$scope.sessions[i].key = $scope.sessions[i]._id;
+			$scope.sessions[i].user = $scope.$eval($scope.sessions[i].session).passport.user;
+		}
+	});
+});
+app.controller('activityController', function ( $scope, $http, $routeParams) {
+		$http.get('/activity/'+$routeParams.id).success(function (data) {
+				$scope.activities = data;
+		});
+	
 });
 
 app.controller('authController', function ($scope, $http, $rootScope, $location) {

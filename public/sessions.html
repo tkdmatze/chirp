@@ -1,0 +1,11 @@
+
+<div id="stream">
+	<h4>Sessions</h4>
+		<div class="post" ng-repeat="session in sessions | orderBy:'expires':true" ng-class-odd="'odd'" ng-class-even="'even'"> 
+			<p><a href='#/activity/{{session.key}}'>{{session.key}}</a></p>
+			<small>{{session.user}}</small>
+			<small class="pull-right">{{session.expires | date:"HH:mm 'Uhr am' dd.MM.yyyy"}}</small>
+		</div>
+</div>
+
+
